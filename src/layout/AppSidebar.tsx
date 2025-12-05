@@ -105,6 +105,11 @@ const AppSidebar: React.FC = () => {
           path: selectedProjectId ? `/projects/${selectedProjectId}/prompts` : undefined,
         },
         {
+          icon: <TaskIcon className="h-5 w-5" />,
+          name: "My Rules",
+          path: selectedProjectId ? `/projects/${selectedProjectId}/rules` : undefined,
+        },
+        {
           icon: <PaperPlaneIcon className="h-5 w-5" />,
           name: "Execute Prompt",
           path: "/serveprompt",

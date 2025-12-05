@@ -882,6 +882,39 @@ export const tenantService = {
         }
     }
 };
+// Add rule service methods
+export const ruleService = {
+    findAllByProject: async (projectId: string): Promise<any> => {
+        
+        const response = await apiClient.get(`/api/rules`);
+        console.log('rulessss: ', response.data);
+        return response.data;
+    },
+
+    findOne: async (id: string): Promise<any> => {
+         console.log("rule id:" ,id);
+        const response = await apiClient.get(`/api/rules/${id}`);
+        console.log("Successsssssssssss rule response:", response.data);
+        return response.data;
+    },
+
+    create: async (projectId: string, data: any): Promise<any> => {
+        const response = await apiClient.post('/api/rules', { ...data });
+        return response.data;
+    },
+
+    update: async (id: string, data: any): Promise<any> => {
+        const response = await apiClient.patch(`/api/rules/${id}`, data);
+        console.log('rulessss update: ', response.data);
+        return response.data;
+    },
+
+    remove: async (id: string): Promise<void> => {
+        await apiClient.delete(`/api/rules/${id}`);
+    },
+};
+
+
 
 export const apiKeyService = {
     create: async (payload: generated.CreateApiKeyDto): Promise<any> => {

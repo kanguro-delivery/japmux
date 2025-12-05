@@ -74,6 +74,14 @@ const DashboardPage: React.FC = () => {
             bgPattern: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30',
         },
         {
+            name: 'My Rules',
+            description: 'Manage your saved rules',
+            icon: <ClipboardDocumentCheckIcon className="h-6 w-6" />,
+            href: selectedProjectId ? `/projects/${selectedProjectId}/rules` : '#',
+            color: 'from-emerald-500 to-teal-600',
+            bgPattern: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30',
+        },
+        {
             name: 'Magic Assistant',
             description: 'Intelligent assistant for your prompts',
             icon: <SparklesIcon className="h-6 w-6" />,
