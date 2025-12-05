@@ -28,6 +28,7 @@ import {
   EyeIcon as HeroEyeIcon,
   ChatBubbleLeftRightIcon as HeroChatIcon,
   SparklesIcon as HeroSparklesIcon,
+  AdjustmentsHorizontalIcon,
   BuildingOfficeIcon as HeroBuildingIcon,
   TableCellsIcon as HeroTableIcon,
   ClipboardDocumentCheckIcon as HeroTaskIcon,
@@ -105,7 +106,7 @@ const AppSidebar: React.FC = () => {
           path: selectedProjectId ? `/projects/${selectedProjectId}/prompts` : undefined,
         },
         {
-          icon: <TaskIcon className="h-5 w-5" />,
+          icon: <AdjustmentsHorizontalIcon className="h-5 w-5" />,
           name: "My Rules",
           path: selectedProjectId ? `/projects/${selectedProjectId}/rules` : undefined,
         },
