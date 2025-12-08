@@ -108,7 +108,7 @@ const AppSidebar: React.FC = () => {
         {
           icon: <AdjustmentsHorizontalIcon className="h-5 w-5" />,
           name: "My Rules",
-          path: selectedProjectId ? `/projects/${selectedProjectId}/rules` : undefined,
+          path:  `/rules` ,
         },
         {
           icon: <PaperPlaneIcon className="h-5 w-5" />,

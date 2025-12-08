@@ -16,10 +16,10 @@ interface Rule {
 }
 
 interface ProjectRulesListProps {
-  projectId: string;
+  // projectId: string;
 }
 
-export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({ projectId }) => {
+export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({  }) => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,12 +27,12 @@ export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({ projectId })
 
   useEffect(() => {
     fetchRules();
-  }, [projectId]);
+  }, []);
 
   const fetchRules = async () => {
     try {
       setLoading(true);
-      const rulesData = await ruleService.findAllByProject(projectId);
+      const rulesData = await ruleService.findAllByProject();
       setRules(rulesData);
       setError(null);
     } catch (err: any) {
@@ -63,7 +63,7 @@ export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({ projectId })
   };
 
   const handleEditRule = (rule: Rule) => {
-    window.location.href = `/projects/${projectId}/rules/${rule.id}/edit`;
+    window.location.href = `/rules/${rule.id}/edit`;
   };
 
   if (loading) {
@@ -93,7 +93,6 @@ export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({ projectId })
       rules={rules}
       onEdit={handleEditRule}
       onDelete={handleDeleteRule}
-      projectId={projectId}
       loading={loading}
       deletingRules={deletingRules}
     />

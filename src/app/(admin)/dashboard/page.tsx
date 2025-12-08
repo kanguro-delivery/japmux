@@ -77,7 +77,7 @@ const DashboardPage: React.FC = () => {
             name: 'My Rules',
             description: 'Manage your saved rules',
             icon: <ClipboardDocumentCheckIcon className="h-6 w-6" />,
-            href: selectedProjectId ? `/projects/${selectedProjectId}/rules` : '#',
+            href:  `/rules` ,
             color: 'from-emerald-500 to-teal-600',
             bgPattern: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30',
         },

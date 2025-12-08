@@ -18,43 +18,18 @@ interface RulesTableProps {
     rules: Rule[];
     onEdit: (item: Rule) => void;
     onDelete: (id: string, name: string) => Promise<void>;
-    projectId?: string;
     loading?: boolean;
     deletingRules?: Set<string>;
 }
 
-const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onDelete, projectId, loading, deletingRules = new Set() }) => {
+const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onDelete, loading, deletingRules = new Set() }) => {
     const [rulesWithStats, setRulesWithStats] = useState<Rule[]>([]);
 
     useEffect(() => {
         setRulesWithStats(rules);
     }, [rules]);
 
-    // Función para obtener el tipo de regla basado en su contenido
-    // const getRuleType = (rule: Rule): { label: string; color: string } => {
-    //     const title = rule.title?.toLowerCase() || '';
-    //     const content = rule.content?.toLowerCase() || '';
-    //     const combined = `${title} ${content}`;
-
-    //     if (combined.includes('security') || combined.includes('auth') || combined.includes('permission')) {
-    //         return { label: 'SECURITY', color: 'bg-red-100/80 dark:bg-red-900/50 text-red-800 dark:text-red-200 border border-red-200/50 dark:border-red-800/50' };
-    //     }
-    //     if (combined.includes('validation') || combined.includes('validate') || combined.includes('check')) {
-    //         return { label: 'VALIDATION', color: 'bg-yellow-100/80 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-200 border border-yellow-200/50 dark:border-yellow-800/50' };
-    //     }
-    //     if (combined.includes('format') || combined.includes('style') || combined.includes('template')) {
-    //         return { label: 'FORMAT', color: 'bg-blue-100/80 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 border border-blue-200/50 dark:border-blue-800/50' };
-    //     }
-    //     if (combined.includes('business') || combined.includes('logic') || combined.includes('process')) {
-    //         return { label: 'BUSINESS', color: 'bg-green-100/80 dark:bg-green-900/50 text-green-800 dark:text-green-200 border border-green-200/50 dark:border-green-800/50' };
-    //     }
-    //     if (combined.includes('content') || combined.includes('text') || combined.includes('language')) {
-    //         return { label: 'CONTENT', color: 'bg-purple-100/80 dark:bg-purple-900/50 text-purple-800 dark:text-purple-200 border border-purple-200/50 dark:border-purple-800/50' };
-    //     }
-
-    //     return { label: 'GENERAL', color: 'bg-gray-100/80 dark:bg-gray-900/50 text-gray-800 dark:text-gray-200 border border-gray-200/50 dark:border-gray-800/50' };
-    // };
-
+    
     // Función para generar bandera de idioma
     const renderLanguageFlag = (language?: string) => {
         if (!language) {
@@ -105,12 +80,6 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onDelete, projec
                         <div className="relative p-6 pb-0 border-b border-white/20 dark:border-gray-700/30 bg-gradient-to-r from-white/50 via-white/30 to-white/50 dark:from-gray-800/50 dark:via-gray-700/30 dark:to-gray-800/50">
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex-1 min-w-0 pr-16">
-                                    {/* Rule type badge */}
-                                    {/* <div className="mb-3">
-                                        <span className={`inline-flex items-center px-3 py-1 rounded-xl text-xs font-semibold shadow-sm backdrop-blur-sm ${getRuleType(item).color}`}>
-                                            {getRuleType(item).label}
-                                        </span>
-                                    </div> */}
 
                                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors duration-300 line-clamp-2" title={item.title}>
                                         {item.title}
@@ -186,7 +155,7 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onDelete, projec
                                     <span>Updated {new Date(item.updatedAt).toLocaleDateString()}</span>
                                 </div>
                                 <Link
-                                    href={`/projects/${projectId}/rules/${item.id}`}
+                                    href={`/rules/${item.id}`}
                                     className="flex items-center space-x-2 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-200 group/link"
                                     title="View Rule Details"
                                 >

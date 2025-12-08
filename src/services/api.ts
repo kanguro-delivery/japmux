@@ -884,7 +884,7 @@ export const tenantService = {
 };
 // Add rule service methods
 export const ruleService = {
-    findAllByProject: async (projectId: string): Promise<any> => {
+    findAllByProject: async (): Promise<any> => {
         
         const response = await apiClient.get(`/api/rules`);
         console.log('rulessss: ', response.data);

@@ -3,9 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
-    CreatePromptDto,
-    projectService,
-    promptService,
     ruleService,
     CreateProjectDto, // Unificado aquí
     UpdatePromptDto // Necesario para la firma de onSave en PromptForm
@@ -39,8 +36,6 @@ const NewRulePage: React.FC = () => {
     const [loadingProject, setLoadingProject] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
 
-    // Definir initialData para un nuevo prompt
-    // tenantId ya no se necesita aquí, se infiere en el backend
     
     const initialDataForNewRule = {
         title: '',
@@ -50,25 +45,8 @@ const NewRulePage: React.FC = () => {
       
     };
 
-    // useEffect(() => {
-    //     if (projectId) {
-    //         setLoadingProject(true);
-    //         projectService.findOne(projectId)
-    //             .then(data => setProject(data))
-    //             .catch(err => {
-    //                 console.error("Error fetching project details:", err);
-    //                 showErrorToast(getApiErrorMessage(err, "Failed to load project details."));
-    //                 setProject(null); // Asegurarse de que project es null si hay error
-    //             })
-    //             .finally(() => setLoadingProject(false));
-    //     }
-    // }, [projectId]);
 
     const handleCreateRule = async (rulePayload: any) => {
-        // if (!projectId) {
-        //     showErrorToast("Project ID is missing.");
-        //     return;
-        // }
 
         setIsSaving(true);
         try {
@@ -110,21 +88,13 @@ const NewRulePage: React.FC = () => {
         { label: "New Rule" }
     ];
 
-    // if (!project) {
-    //     return <p>Loading project details...</p>;
-    // }
-
-    // if (!project && !loadingProject) {
-    //     return <p>Error loading project details. Cannot create rule.</p>;
-    // }
-
-
+    
     return (
         <>
             <Breadcrumb crumbs={breadcrumbs} />
             <div className="my-6">
                 <h2 className="mb-2 text-2xl font-bold text-black dark:text-white">
-                    Create New Rule for <span className="text-indigo-600 dark:text-indigo-400">{project?.name || projectId}</span>
+                    Create New Rule <span className="text-indigo-600 dark:text-indigo-400">{project?.name || projectId}</span>
                 </h2>
             </div>
             <div className="bg-white dark:bg-gray-800 shadow-md rounded p-6">
