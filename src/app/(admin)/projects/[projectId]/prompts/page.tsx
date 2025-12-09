@@ -17,6 +17,7 @@ import PromptsTable from '@/components/tables/PromptsTable';
 import PromptForm from '@/components/form/PromptForm';
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
 import logger from '@/utils/logger';
+import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 
 // Tipo personalizado para un prompt existente con id
 type PromptWithId = CreatePromptDto & { id: string };
@@ -27,18 +28,6 @@ interface PromptWithLanguage extends Omit<PromptWithId, 'languageCode'> {
 }
 
 // Helper para extraer mensajes de error de forma segura
-const getApiErrorMessage = (error: unknown, defaultMessage: string): string => {
-    if (typeof error === 'object' && error !== null && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        if (axiosError.response?.data?.message) {
-            return axiosError.response.data.message;
-        }
-    }
-    if (error instanceof Error) {
-        return error.message;
-    }
-    return defaultMessage;
-};
 
 const PromptsPage: React.FC = () => {
     const [prompts, setPrompts] = useState<PromptWithId[]>([]);

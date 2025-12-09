@@ -1,44 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import TextInput from '../form/form-elements/TextInput';
+import TextareaInput from '../form/form-elements/TextAreaInput';
+import SelectInput from '../form/form-elements/SelectInput';
 
 interface RuleFormProps {
-  projectId: string;
-  onCreate: (data: {
-    title: string;
-    content: string;
-    version: string;
-    language: string;
-  }) => Promise<void>;
-  onUpdate?: (data: any) => Promise<void>;
+  initialData?: { title?: string; content?: string; language?: string; version?: string };
+  onSubmit?: (data: any) => Promise<void>; 
   onCancel: () => void;
+  submitLabel?: string;
+  isLoading?: boolean;
+  readOnly?: boolean;  
 }
 
-interface FormData {
-  title: string;
-  content: string;
-  version: string;
-  language: string;
-}
 
 const RuleForm: React.FC<RuleFormProps> = ({
-  onCreate,
+  initialData = {},
+  onSubmit,
   onCancel,
+  submitLabel = "Save",
+  isLoading = false,
+  readOnly = false
 }) => {
-  const [formData, setFormData] = useState<FormData>({
-    title: '',
-    content: '',
-    version: '1.0',
-    language: 'en-US',
+
+  const [formData, setFormData] = useState({
+    title: initialData.title || "",
+    content: initialData.content || "",
+    language: initialData.language || "en-US",
+    version: initialData.version || "1.0",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setFormData({
+      title: initialData.title || "",
+      content: initialData.content || "",
+      language: initialData.language || "en-US",
+      version: initialData.version || "1.0",
+    });
+  }, [initialData]);
 
-  const handleInputChange =
-    (field: keyof FormData) =>
+  const handleChange =
+    (field: string) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-      setFormData(prev => ({
-        ...prev,
-        [field]: e.target.value,
-      }));
+      setFormData(prev => ({ ...prev, [field]: e.target.value }));
     };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,125 +49,78 @@ const RuleForm: React.FC<RuleFormProps> = ({
 
     if (!formData.title.trim()) return;
     if (!formData.content.trim()) return;
-    if (!formData.language.trim()) return;
-    if (!formData.version.trim()) return;
 
-    try {
-      setIsLoading(true);
-      await onCreate(formData);
-    } finally {
-      setIsLoading(false);
-    }
+    await onSubmit?.(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={readOnly ? (e) => e.preventDefault() : handleSubmit} className="space-y-6">
 
-      {/* ✅ Title */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Title *
-        </label>
-        <input
-          type="text"
-          value={formData.title}
-          onChange={handleInputChange('title')}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600
-                     rounded-md shadow-sm focus:outline-none focus:ring-2
-                     focus:ring-indigo-500 focus:border-indigo-500
-                     dark:bg-gray-700 dark:text-white"
-          placeholder="Enter rule title"
-          required
-        />
-      </div>
+      
+      {/* Title */}
+      <TextInput
+        label="Title *"
+        value={formData.title}
+        onChange={handleChange("title")}
+        required
+        readOnly={readOnly}
+        disabled={readOnly}
+      />
 
-      {/* ✅ Content */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Content *
-        </label>
-        <textarea
-          value={formData.content}
-          onChange={handleInputChange('content')}
-          rows={6}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600
-                     rounded-md shadow-sm focus:outline-none focus:ring-2
-                     focus:ring-indigo-500 focus:border-indigo-500
-                     dark:bg-gray-700 dark:text-white"
-          placeholder="Enter rule content"
-          required
-        />
-      </div>
 
-      {/* ✅ Language + Version Grid */}
+      {/* Content */}
+      <TextareaInput
+        label="Content *"
+        value={formData.content}
+        onChange={handleChange("content")}
+        required
+        readOnly={readOnly}
+        disabled={readOnly}
+      />
+
+
+      {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <SelectInput
+          label="Language *"
+          value={formData.language}
+          onChange={handleChange("language")}
+          disabled={readOnly}
+          options={[
+            { value: "en-US", label: "en-US" },
+            { value: "es-ES", label: "es-ES" },
+            { value: "fr-FR", label: "fr-FR" },
+          ]}
+        />
 
-        {/* ✅ Language */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Language *
-          </label>
-          <select
-            value={formData.language}
-            onChange={handleInputChange('language')}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600
-                       rounded-md shadow-sm focus:outline-none focus:ring-2
-                       focus:ring-indigo-500 focus:border-indigo-500
-                       dark:bg-gray-700 dark:text-white"
-            required
-          >
-            <option value="en-US">en-US</option>
-            <option value="es-ES">es-ES</option>
-            <option value="fr-FR">fr-FR</option>
-            <option value="de-DE">de-DE</option>
-            <option value="pt-PT">pt-PT</option>
-          </select>
-        </div>
 
-        {/* ✅ Version */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Version *
-          </label>
-          <input
-            type="text"
-            value={formData.version}
-            onChange={handleInputChange('version')}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600
-                       rounded-md shadow-sm focus:outline-none focus:ring-2
-                       focus:ring-indigo-500 focus:border-indigo-500
-                       dark:bg-gray-700 dark:text-white"
-            placeholder="e.g., 1.0"
-            required
-          />
-        </div>
+        {/* Version */}
+        <TextInput
+          label="Version *"
+          value={formData.version}
+          onChange={handleChange("version")}
+          required
+          readOnly={readOnly}
+          disabled={readOnly}
+        />
+
+
       </div>
 
-      {/* ✅ Buttons */}
-      <div className="flex justify-end space-x-3 pt-4">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300
-                     bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600
-                     rounded-md shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600
-                     focus:outline-none focus:ring-2 focus:ring-offset-2
-                     focus:ring-indigo-500"
-        >
+      {/* Buttons */}
+      <div className="flex justify-end space-x-3">
+        <button type="button" onClick={onCancel} className="px-4 py-2 border rounded-md">
           Cancel
         </button>
 
+       {onSubmit &&
         <button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 text-sm font-medium text-white bg-indigo-600
-                     border border-transparent rounded-md shadow-sm
-                     hover:bg-indigo-700 focus:outline-none focus:ring-2
-                     focus:ring-offset-2 focus:ring-indigo-500
-                     disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md"
         >
-          {isLoading ? 'Saving...' : 'Create Rule'}
-        </button>
+          {isLoading ? "Saving..." : submitLabel}
+        </button>}
       </div>
     </form>
   );

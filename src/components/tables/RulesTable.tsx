@@ -16,13 +16,12 @@ interface Rule {
 
 interface RulesTableProps {
     rules: Rule[];
-    onEdit: (item: Rule) => void;
     onDelete: (id: string, name: string) => Promise<void>;
     loading?: boolean;
     deletingRules?: Set<string>;
 }
 
-const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onDelete, loading, deletingRules = new Set() }) => {
+const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, deletingRules = new Set() }) => {
     const [rulesWithStats, setRulesWithStats] = useState<Rule[]>([]);
 
     useEffect(() => {
@@ -105,14 +104,19 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onEdit, onDelete, loadin
 
                                 {/* Action buttons with glassmorphism */}
                                 <div className="absolute top-4 right-4 flex items-center space-x-2 opacity-60 group-hover:opacity-100 transition-all duration-300">
-                                    <button
-                                        onClick={() => onEdit(item)}
-                                        className="relative p-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg border border-white/30 dark:border-gray-700/40 text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 hover:shadow-lg transition-all duration-300 hover:scale-110"
+                                    <Link
+                                        href={`/rules/${item.id}/edit`}
+                                        className="relative p-2 bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-lg 
+                                                border border-white/30 dark:border-gray-700/40 text-blue-500 
+                                                hover:text-blue-700 dark:hover:text-blue-300 hover:shadow-lg 
+                                                transition-all duration-300 hover:scale-110"
                                         aria-label="Edit Rule"
+                                        title="Edit Rule"
                                     >
                                         <PencilIcon className="w-4 h-4" />
                                         <div className="absolute inset-0 bg-blue-500/10 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                                    </button>
+                                    </Link>
+
                                     <button
                                         onClick={() => {
                                             if (!deletingRules.has(item.id)) {

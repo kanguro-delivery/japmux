@@ -15,11 +15,10 @@ interface Rule {
   updatedAt: string;
 }
 
-interface ProjectRulesListProps {
-  // projectId: string;
+interface RulesListProps {
 }
 
-export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({  }) => {
+export const RulesList: React.FC<RulesListProps> = ({  }) => {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,9 +61,6 @@ export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({  }) => {
     }
   };
 
-  const handleEditRule = (rule: Rule) => {
-    window.location.href = `/rules/${rule.id}/edit`;
-  };
 
   if (loading) {
     return (
@@ -91,7 +87,7 @@ export const ProjectRulesList: React.FC<ProjectRulesListProps> = ({  }) => {
   return (
     <RulesTable
       rules={rules}
-      onEdit={handleEditRule}
+      // onEdit={handleEditRule}
       onDelete={handleDeleteRule}
       loading={loading}
       deletingRules={deletingRules}
