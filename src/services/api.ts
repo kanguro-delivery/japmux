@@ -882,25 +882,40 @@ export const tenantService = {
         }
     }
 };
+
+
+export interface Rule {
+  id: string;
+  title: string;
+  content: string;
+  language?: string;
+  version?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type CreateRuleDto = Omit<Rule, 'id' | 'createdAt' | 'updatedAt'>;
+
+export type UpdateRuleDto = Partial<CreateRuleDto>;
 // Add rule service methods
 export const ruleService = {
-    findAllByProject: async (): Promise<any> => {
-        const response = await apiClient.get(`/api/rules`);
+    findAllByProject: async ():Promise<Rule[]> => {
+        const response = await apiClient.get<Rule[]>(`/api/rules`);
         return response.data;
     },
 
-    findOne: async (id: string): Promise<any> => {
-        const response = await apiClient.get(`/api/rules/${id}`);
+    findOne: async (id: string): Promise<Rule> => {
+        const response = await apiClient.get<Rule>(`/api/rules/${id}`);
         return response.data;
     },
 
-    create: async ( data: any): Promise<any> => {
-        const response = await apiClient.post('/api/rules', { ...data });
+    create: async ( data: CreateRuleDto): Promise<Rule> => {
+        const response = await apiClient.post<Rule>('/api/rules', { ...data });
         return response.data;
     },
 
-    update: async (id: string, data: any): Promise<any> => {
-        const response = await apiClient.patch(`/api/rules/${id}`, data);
+    update: async (id: string, data: UpdateRuleDto): Promise<Rule> => {
+        const response = await apiClient.patch<Rule>(`/api/rules/${id}`, data);
         return response.data;
     },
 

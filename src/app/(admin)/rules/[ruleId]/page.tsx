@@ -7,6 +7,7 @@ import { ruleService } from "@/services/api";
 import Breadcrumb from "@/components/common/PageBreadCrumb";
 import { showErrorToast } from "@/utils/toastUtils";
 import RuleForm from "@/components/form/RuleForm";
+import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
 
 const ViewRulePage: React.FC = () => {
     const router = useRouter();
@@ -29,6 +30,7 @@ const ViewRulePage: React.FC = () => {
                 })
                 .catch((err) => {
                     console.error("Error fetching rule data:", err);
+                    showErrorToast(getApiErrorMessage(err, "Failed to load rule data."));
                     setRuleData(null);
                 })
                 .finally(() => setLoadingRule(false));

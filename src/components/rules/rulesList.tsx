@@ -1,19 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { ruleService } from '@/services/api'; 
+import { Rule, ruleService } from '@/services/api'; 
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
 import RulesTable from '@/components/tables/RulesTable';
+import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 
-interface Rule {
-  id: string;
-  title: string;
-  content: string;
-  language?:string;
-  version?:string;
-  createdAt: string;
-  updatedAt: string;
-}
 
 interface RulesListProps {
 }
@@ -35,7 +27,7 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
       setRules(rulesData);
       setError(null);
     } catch (err: any) {
-      setError(err.message || 'Failed to load rules');
+      getApiErrorMessage(err, "Failed to load rules.")
       showErrorToast('Failed to load rules');
     } finally {
       setLoading(false);
@@ -50,7 +42,7 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
         showSuccessToast('Rule deleted successfully');
         fetchRules();
       } catch (err: any) {
-        showErrorToast(err.message || 'Failed to delete rule');
+        showErrorToast(getApiErrorMessage(err, 'Failed to delete rule'));
       } finally {
         setDeletingRules(prev => {
           const newSet = new Set(prev);

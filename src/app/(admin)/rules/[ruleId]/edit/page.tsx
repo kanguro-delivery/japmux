@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
+    Rule,
  ruleService,
 } from '@/services/api';
 import Breadcrumb from '@/components/common/PageBreadCrumb';
@@ -14,7 +15,7 @@ const EditRulePage: React.FC = () => {
     const router = useRouter();
     const params = useParams();
     const ruleId = params.ruleId as string;
-    const [ruleData, setRuleData] = useState<any | null>(null);
+    const [ruleData, setRuleData] = useState<Rule | null>(null);
     const [loadingRule, setLoadingRule] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
 

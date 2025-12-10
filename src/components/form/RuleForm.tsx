@@ -5,7 +5,7 @@ import SelectInput from '../form/form-elements/SelectInput';
 
 interface RuleFormProps {
   initialData?: { title?: string; content?: string; language?: string; version?: string };
-  onSubmit?: (data: any) => Promise<void>; 
+  onSubmit?: (data: { title: string; content: string; language: string; version: string; }) => Promise<void>; 
   onCancel: () => void;
   submitLabel?: string;
   isLoading?: boolean;

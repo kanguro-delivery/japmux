@@ -2,17 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CopyButton from '../common/CopyButton';
 import { BoltIcon, ClockIcon, DocumentDuplicateIcon, TrashIcon, PencilIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import { Rule } from '@/services/api';
 
 // Tipo personalizado para una regla existente
-interface Rule {
-    id: string;
-    title: string;
-    content: string;
-    language?: string;
-    version?: string;
-    createdAt: string;
-    updatedAt: string;
-}
 
 interface RulesTableProps {
     rules: Rule[];
