@@ -36,7 +36,7 @@ const RuleForm: React.FC<RuleFormProps> = ({
       language: initialData.language || "en-US",
       version: initialData.version || "1.0",
     });
-  }, [initialData]);
+  }, [initialData.title, initialData.content, initialData.language, initialData.version]);
 
   const handleChange =
     (field: string) =>
