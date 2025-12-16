@@ -1,7 +1,7 @@
 import React from "react";
 
 interface SelectInputProps {
-  label: string;
+  label?: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   options: { value: string; label: string }[];
@@ -17,7 +17,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 }) => {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">{label}</label>
+      {label&& <label className="block text-sm font-medium mb-2">{label}</label>}
       <select
         value={value}
         onChange={onChange}

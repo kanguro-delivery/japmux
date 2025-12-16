@@ -111,6 +111,11 @@ const AppSidebar: React.FC = () => {
           path:  `/rules` ,
         },
         {
+          icon: <AdjustmentsHorizontalIcon className="h-5 w-5" />,
+          name: "Analysis Plans",
+          path:  `/analysis-plan` ,
+        },
+        {
           icon: <PaperPlaneIcon className="h-5 w-5" />,
           name: "Execute Prompt",
           path: "/serveprompt",
