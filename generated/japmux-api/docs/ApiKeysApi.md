@@ -1,4 +1,4 @@
-# ApiKeysApi
+# APIKeysApi
 
 All URIs are relative to *http://localhost*
 
@@ -18,13 +18,13 @@ All URIs are relative to *http://localhost*
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration,
     CreateApiKeyDto
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let createApiKeyDto: CreateApiKeyDto; //
 
@@ -69,12 +69,12 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 const { status, data } = await apiInstance.apiKeyControllerFindAll();
 ```
@@ -112,12 +112,12 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let id: string; // (default to undefined)
 
@@ -162,12 +162,12 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let id: string; // (default to undefined)
 
@@ -212,13 +212,13 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration,
     UpdateApiKeyDto
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let id: string; // (default to undefined)
 let updateApiKeyDto: UpdateApiKeyDto; //

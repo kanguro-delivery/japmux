@@ -1,16 +1,15 @@
-
 import React from "react";
 
-interface TextareaInputProps {
+interface TextInputProps {
   label: string;
   value: string;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   readOnly?: boolean;
   disabled?: boolean;
 }
 
-const TextareaInput: React.FC<TextareaInputProps> = ({
+const TextInput: React.FC<TextInputProps> = ({
   label,
   value,
   onChange,
@@ -21,10 +20,10 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   return (
     <div>
       <label className="block text-sm font-medium mb-2">{label}</label>
-      <textarea
+      <input
+        type="text"
         value={value}
         onChange={onChange}
-        rows={6}
         className="w-full px-3 py-2 border rounded-md"
         required={required}
         readOnly={readOnly}
@@ -34,4 +33,4 @@ const TextareaInput: React.FC<TextareaInputProps> = ({
   );
 };
 
-export default TextareaInput;
+export default TextInput;
