@@ -7,6 +7,7 @@ interface TextInputProps {
   required?: boolean;
   readOnly?: boolean;
   disabled?: boolean;
+  placeholder?:string
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -16,6 +17,7 @@ const TextInput: React.FC<TextInputProps> = ({
   required = false,
   readOnly = false,
   disabled = false,
+  placeholder=''
 }) => {
   return (
     <div>
@@ -28,6 +30,7 @@ const TextInput: React.FC<TextInputProps> = ({
         required={required}
         readOnly={readOnly}
         disabled={disabled}
+        placeholder={placeholder}
       />
     </div>
   );

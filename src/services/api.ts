@@ -5,6 +5,7 @@ import * as generated from './generated';
 // Eliminar esta importación, apiClient se define abajo
 // import { apiClient } from '../axiosClient';
 import { PromptAssetData } from '@/components/tables/PromptAssetsTable';
+import { AnalysisPlanProperty } from '@/components/form/AnalysisPlanProperties';
 // Eliminar la importación anterior si existe:
 // import { PromptVersionData } from '@/app/(admin)/projects/[projectId]/prompts/[promptId]/versions/page.tsx';
 
@@ -885,13 +886,13 @@ export const tenantService = {
 
 
 export interface Rule {
-  id: string;
-  title: string;
-  content: string;
-  language?: string;
-  version?: string;
-  createdAt: string;
-  updatedAt: string;
+    id: string;
+    title: string;
+    content: string;
+    language?: string;
+    version?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type CreateRuleDto = Omit<Rule, 'id' | 'createdAt' | 'updatedAt'>;
@@ -899,7 +900,7 @@ export type CreateRuleDto = Omit<Rule, 'id' | 'createdAt' | 'updatedAt'>;
 export type UpdateRuleDto = Partial<CreateRuleDto>;
 // Add rule service methods
 export const ruleService = {
-    findAllByProject: async ():Promise<Rule[]> => {
+    findAllByProject: async (): Promise<Rule[]> => {
         const response = await apiClient.get<Rule[]>(`/api/rules`);
         return response.data;
     },
@@ -909,7 +910,7 @@ export const ruleService = {
         return response.data;
     },
 
-    create: async ( data: CreateRuleDto): Promise<Rule> => {
+    create: async (data: CreateRuleDto): Promise<Rule> => {
         const response = await apiClient.post<Rule>('/api/rules', { ...data });
         return response.data;
     },
@@ -921,6 +922,49 @@ export const ruleService = {
 
     remove: async (id: string): Promise<void> => {
         await apiClient.delete(`/api/rules/${id}`);
+    },
+};
+
+// Re-export AnalysisPlanProperty for convenience
+export type { AnalysisPlanProperty };
+
+export interface AnalysisPlan {
+    id: string;
+    name: string;
+    promptText: string;
+    properties?: AnalysisPlanProperty[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export type CreateAnalysisPlanDto = Omit<AnalysisPlan, 'id' | 'createdAt' | 'updatedAt'>;
+
+export type UpdateAnalysisPlanDto = Partial<CreateAnalysisPlanDto>;
+// Add rule service methods
+export const analysisPlanService = {
+    findAllByProject: async (): Promise<AnalysisPlan[]> => {
+        const response = await apiClient.get<AnalysisPlan[]>(`/api/analysis-plans`);
+        return response.data;
+    },
+
+    findOne: async (id: string): Promise<AnalysisPlan> => {
+        const response = await apiClient.get<AnalysisPlan>(`/api/analysis-plans/${id}`);
+        return response.data;
+    },
+
+    create: async (data: CreateAnalysisPlanDto): Promise<AnalysisPlan> => {
+
+        const response = await apiClient.post<AnalysisPlan>('/api/analysis-plans', { ...data });
+        return response.data;
+    },
+
+    update: async (id: string, data: UpdateAnalysisPlanDto): Promise<AnalysisPlan> => {
+        const response = await apiClient.patch<AnalysisPlan>(`/api/analysis-plans/${id}`, data);
+        return response.data;
+    },
+
+    remove: async (id: string): Promise<void> => {
+        await apiClient.delete(`/api/analysis-plans/${id}`);
     },
 };
 

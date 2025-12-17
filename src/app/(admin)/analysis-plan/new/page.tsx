@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+    analysisPlanService,
     ruleService,
 } from '@/services/api';
 import Breadcrumb from '@/components/common/PageBreadCrumb';
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
-import RuleForm from '@/components/form/RuleForm';
 import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 import AnalysisPlanForm from '@/components/form/analysisPlanForm';
 
@@ -17,21 +17,22 @@ const NewAnalysisPlanPage: React.FC = () => {
     const [isSaving, setIsSaving] = useState<boolean>(false);
 
     
-    const handleCreateRule = async (rulePayload: any) => {
+    const handleCreateAnalysisPlan = async (analysisPlanPayload: any) => {
 
         setIsSaving(true);
         try {
-            console.log('Creating rule with payload:', {...rulePayload });
-            const createdRule = await ruleService.create( rulePayload);
-            if (createdRule && createdRule.id) {
-                showSuccessToast(`Analysis Plan "${rulePayload.title}" created successfully.`);
+            console.log('Creating AnalysisPlan with payload:', {...analysisPlanPayload });
+           
+            const createdAnalysisPlan = await analysisPlanService.create( analysisPlanPayload);
+            if (createdAnalysisPlan && createdAnalysisPlan.id) {
+                showSuccessToast(`Analysis Plan "${analysisPlanPayload.name}" created successfully.`);
                 router.push(`/analysis-plan`);
             } else {
                 throw new Error("Failed to create rule: No rule ID returned");
             }
         } catch (err: unknown) {
-            console.error("Error creating rule:", err);
-            const errorMessage = getApiErrorMessage(err, "Failed to create rule.");
+            console.error("Error creating AnalysisPlan:", err);
+            const errorMessage = getApiErrorMessage(err, "Failed to create AnalysisPlan.");
             showErrorToast(errorMessage);
             // No redirigir en caso de error
         } finally {
@@ -58,17 +59,8 @@ const NewAnalysisPlanPage: React.FC = () => {
                 </h2>
             </div>
             <div className="bg-white dark:bg-gray-800 shadow-md rounded p-6">
-                {/* <AnalysisPlanForm
-                onCancel={handleCancel}  
-                onUpdate={handleCreateRule}
-                initialData={{}}
-                isEditing={isSaving}
-                onCreate={handleCreateRule}
-
-
-                ></AnalysisPlanForm> */}
                 <AnalysisPlanForm
-                    onSubmit={handleCreateRule}
+                    onSubmit={handleCreateAnalysisPlan}
                     onCancel={handleCancel}     
                     submitLabel="Create Analysis Plan"
                     isLoading={isSaving}

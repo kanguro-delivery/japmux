@@ -3,8 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Breadcrumb from '@/components/common/PageBreadCrumb';
-import { RulesList } from '@/components/rules/rulesList';
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { AnalysisPlanList } from '@/components/analysisPlan/AnalysisPlanList';
 
 const analysisPlanPage: React.FC = () => {
   const breadcrumbs = [
@@ -36,10 +36,14 @@ const analysisPlanPage: React.FC = () => {
             </Link>
           </div>
         </div> 
-
-       
         
-        
+         <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/60 dark:from-gray-900/60 dark:via-gray-800/40 dark:to-gray-900/60 backdrop-blur-xl rounded-3xl"></div>
+                  
+                  <div className="relative p-6 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-3xl border border-white/30 dark:border-gray-700/40 shadow-xl">
+                    <AnalysisPlanList/>
+                  </div>
+                </div>
       </div>
     </div>
   );
