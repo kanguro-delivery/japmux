@@ -41,7 +41,6 @@ const AnalysisPlanPropertiesEditor: React.FC<AnalysisPlanPropertiesEditorProps> 
   
 useEffect(() => {
   if (initialProperties) setProperties(initialProperties);
-  console.log('initialPropertiesss', initialProperties);
 }, [initialProperties]);
 
   useEffect(() => {
@@ -99,30 +98,35 @@ useEffect(() => {
       {properties.map((prop, index) => (
         <div
           key={index}
-          className="grid items-start gap-2 p-2 border rounded"
+          className="grid items-center  gap-3 p-3 border rounded"
           style={{ gridTemplateColumns: "auto 1fr 0.5fr 2fr auto" }}
         >
           {/* Required checkbox */}
-          <RequiredCheckbox
-            checked={prop.required}
-            onChange={(value) => handlePropertyChange(index, "required", value)}
-            tooltip="Required"
-            disabled={readOnly}
-          />
+      <div className="flex items-center justify-center h-10">
+        <RequiredCheckbox
+          checked={prop.required}
+          onChange={(value) => handlePropertyChange(index, "required", value)}
+          tooltip="Required"
+          disabled={readOnly}
+        />
+      </div>
 
           {/* Property Name */}
-          <div className="flex flex-col">
-            <TextInput
-              label=""
-              value={prop.name}
-              onChange={(e) => handlePropertyChange(index, "name", e.target.value)}
-              placeholder="Property Name"
-              disabled={readOnly}
-            />
-            {errors[index] && <p className="text-red-500 text-xs mt-1 ml-1">{errors[index]}</p>}
-          </div>
+          <div className="flex flex-col justify-center h-10">
+          <TextInput
+            label=""
+            value={prop.name}
+            onChange={(e) => handlePropertyChange(index, "name", e.target.value)}
+            placeholder="Property Name"
+            disabled={readOnly}
+          />
+          {errors[index] && (
+            <p className="text-red-500 text-xs mt-1 ml-1">{errors[index]}</p>
+          )}
+        </div>
 
           {/* Type select */}
+         <div className="flex items-center h-10">
           <SelectInput
             disabled={readOnly}
             value={prop.type}
@@ -132,11 +136,13 @@ useEffect(() => {
               { value: "boolean", label: "boolean" },
             ]}
           />
+        </div>
 
           {/* Enum / MultiInput */}
+         <div className="flex items-center">
           {prop.type === "string" ? (
             <MultiInput
-             disabled={readOnly}
+              disabled={readOnly} 
               values={prop.enumValues}
               onChange={(values) => handlePropertyChange(index, "enumValues", values)}
               placeholder="Press Enter to add values"
@@ -144,7 +150,7 @@ useEffect(() => {
             />
           ) : (
             <TextInput
-            disabled={readOnly}
+              disabled={readOnly}
               label=""
               value={prop.enumValues.join(",")}
               onChange={(e) =>
@@ -154,44 +160,37 @@ useEffect(() => {
                   e.target.value.split(",").map((v) => v.trim())
                 )
               }
-              
             />
           )}
+        </div>
 
           {/* Delete button */}
+            {!readOnly && (
+              <div className="flex items-center justify-center h-10">
+                <button type="button" onClick={() => handleDeleteProperty(index)}>
+                  <TrashIcon className="w-5 h-5 text-red-500" />
+                </button>
+              </div>
+            )}
+
+           </div>
+                  ))}
+
           {!readOnly && (
-        <button type="button" onClick={() => handleDeleteProperty(index)}>
-          <TrashIcon className="w-5 h-5 text-red-500" />
-        </button>
+        <div className="flex justify-end mt-3">
+        <button
+        type="button"
+        onClick={handleAddProperty}
+        className="inline-flex items-center gap-2 rounded-md bg-white border dark:text-indigo-400/70 px-3 py-2 text-sm font-medium text-indigo-600 shadow-sm hover:bg-indigo-50 hover:border-indigo-600 transition-colors"
+        title="Add a new property"
+      >
+        <span className="flex items-center justify-center">
+          <PlusIcon className="h-4 w-4" />
+        </span>
+        <span>Add property</span>
+      </button>
+        </div>
       )}
-
-        </div>
-      ))}
-
-    {!readOnly && (
-      <div className="flex justify-start">
-        <div className="relative group">
-          <button type="button" onClick={handleAddProperty} title="Add Property">
-            <PlusIcon
-              className="w-8 h-8"
-              style={{
-                stroke: "url(#plus-gradient)",
-                strokeWidth: 2.2,
-              }}
-            />
-          </button>
-
-          <svg width="0" height="0">
-            <defs>
-              <linearGradient id="plus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#465fff" />
-                <stop offset="100%" stopColor="#a855f7" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
-    )}
     </div>
   );
 };

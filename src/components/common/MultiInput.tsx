@@ -51,7 +51,7 @@ const MultiInput: React.FC<MultiInputProps> = ({ values, onChange, placeholder, 
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="flex-1 min-w-[80px] px-2 py-1 border rounded text-sm dark:bg-gray-800 dark:text-gray-100"
+        className="w-full px-3 py-2 border rounded-md"
       />
     </div>
   );

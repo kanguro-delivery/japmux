@@ -21,7 +21,9 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
   return (
     <div>
+      {label && (
       <label className="block text-sm font-medium mb-2">{label}</label>
+    )}
       <input
         type="text"
         value={value}
