@@ -5,9 +5,10 @@ interface MultiInputProps {
   onChange: (values: string[]) => void;
   placeholder?: string;
   className?: string;
+   disabled?:boolean;
 }
 
-const MultiInput: React.FC<MultiInputProps> = ({ values, onChange, placeholder, className }) => {
+const MultiInput: React.FC<MultiInputProps> = ({ values, onChange, placeholder, className,disabled }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -44,6 +45,7 @@ const MultiInput: React.FC<MultiInputProps> = ({ values, onChange, placeholder, 
         </div>
       ))}
       <input
+      disabled={disabled}
         type="text"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}

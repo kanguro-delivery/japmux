@@ -14,6 +14,7 @@ import {
     SparklesIcon,
     PaperAirplaneIcon,
     ClipboardDocumentCheckIcon,
+    WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline';
 import {
     DocumentDuplicateIcon,
@@ -84,7 +85,7 @@ const DashboardPage: React.FC = () => {
         {
             name: 'Analysis Plans',
             description: 'Manage your saved analysis Plans',
-            icon: <ClipboardDocumentCheckIcon className="h-6 w-6" />,
+            icon: <WrenchScrewdriverIcon className="h-6 w-6" />,
             href:  `/analysis-plan` ,
             color: 'from-emerald-500 to-teal-600',
             bgPattern: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30',

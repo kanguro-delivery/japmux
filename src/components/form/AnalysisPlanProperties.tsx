@@ -17,8 +17,10 @@ export interface AnalysisPlanProperty {
 interface AnalysisPlanPropertiesEditorProps {
   initialProperties?: AnalysisPlanProperty[];
   onChange?: (properties: AnalysisPlanProperty[]) => void;
-  onErrorsChange?: (hasErrors: boolean) => void; 
+  onErrorsChange?: (hasErrors: boolean) => void;
+  readOnly?: boolean;
 }
+
 
 const defaultProperty: AnalysisPlanProperty = {
   name: "",
@@ -31,6 +33,7 @@ const AnalysisPlanPropertiesEditor: React.FC<AnalysisPlanPropertiesEditorProps> 
   initialProperties = [],
   onChange,
   onErrorsChange,
+  readOnly = false,
 }) => {
   const [properties, setProperties] = useState<AnalysisPlanProperty[]>(initialProperties);
   const [errors, setErrors] = useState<{ [key: number]: string }>({});
@@ -38,6 +41,7 @@ const AnalysisPlanPropertiesEditor: React.FC<AnalysisPlanPropertiesEditorProps> 
   
 useEffect(() => {
   if (initialProperties) setProperties(initialProperties);
+  console.log('initialPropertiesss', initialProperties);
 }, [initialProperties]);
 
   useEffect(() => {
@@ -48,12 +52,14 @@ useEffect(() => {
   }, [errors, onErrorsChange]);
 
   const handleAddProperty = () => {
+     if (readOnly) return;
     const newProperties = [...properties, { ...defaultProperty }];
     setProperties(newProperties);
     onChange?.(newProperties);
   };
 
   const handleDeleteProperty = (index: number) => {
+     if (readOnly) return;
     const newProperties = properties.filter((_, i) => i !== index);
     setProperties(newProperties);
     onChange?.(newProperties);
@@ -63,6 +69,7 @@ useEffect(() => {
   };
 
   const handlePropertyChange = (index: number, field: keyof AnalysisPlanProperty, value: any) => {
+     if (readOnly) return;
     setProperties((prev) => {
       const newProps = [...prev];
 
@@ -100,6 +107,7 @@ useEffect(() => {
             checked={prop.required}
             onChange={(value) => handlePropertyChange(index, "required", value)}
             tooltip="Required"
+            disabled={readOnly}
           />
 
           {/* Property Name */}
@@ -109,12 +117,14 @@ useEffect(() => {
               value={prop.name}
               onChange={(e) => handlePropertyChange(index, "name", e.target.value)}
               placeholder="Property Name"
+              disabled={readOnly}
             />
             {errors[index] && <p className="text-red-500 text-xs mt-1 ml-1">{errors[index]}</p>}
           </div>
 
           {/* Type select */}
           <SelectInput
+            disabled={readOnly}
             value={prop.type}
             onChange={(e) => handlePropertyChange(index, "type", e.target.value)}
             options={[
@@ -126,6 +136,7 @@ useEffect(() => {
           {/* Enum / MultiInput */}
           {prop.type === "string" ? (
             <MultiInput
+             disabled={readOnly}
               values={prop.enumValues}
               onChange={(values) => handlePropertyChange(index, "enumValues", values)}
               placeholder="Press Enter to add values"
@@ -133,6 +144,7 @@ useEffect(() => {
             />
           ) : (
             <TextInput
+            disabled={readOnly}
               label=""
               value={prop.enumValues.join(",")}
               onChange={(e) =>
@@ -142,18 +154,21 @@ useEffect(() => {
                   e.target.value.split(",").map((v) => v.trim())
                 )
               }
-              disabled={prop.type === "boolean"}
+              
             />
           )}
 
           {/* Delete button */}
-          <button type="button" onClick={() => handleDeleteProperty(index)}>
-            <TrashIcon className="w-5 h-5 text-red-500" />
-          </button>
+          {!readOnly && (
+        <button type="button" onClick={() => handleDeleteProperty(index)}>
+          <TrashIcon className="w-5 h-5 text-red-500" />
+        </button>
+      )}
+
         </div>
       ))}
 
-    
+    {!readOnly && (
       <div className="flex justify-start">
         <div className="relative group">
           <button type="button" onClick={handleAddProperty} title="Add Property">
@@ -176,6 +191,7 @@ useEffect(() => {
           </svg>
         </div>
       </div>
+    )}
     </div>
   );
 };

@@ -1,72 +1,96 @@
-
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { analysisPlanService, ruleService } from "@/services/api";
-import Breadcrumb from "@/components/common/PageBreadCrumb";
-import { showErrorToast } from "@/utils/toastUtils";
-import RuleForm from "@/components/form/RuleForm";
-import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
-import AnalysisPlanForm from "@/components/form/analysisPlanForm";
+import React, { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import {
+    AnalysisPlan,
+    analysisPlanService,
+} from '@/services/api';
+import Breadcrumb from '@/components/common/PageBreadCrumb';
+import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
+import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
+import AnalysisPlanForm from '@/components/form/analysisPlanForm';
+import { schemaToProperties } from '@/utils/schemaToProperties';
+
+export interface AnalysisPlanPayload {
+  name: string;
+  structuredDataPrompt: string;
+  structuredDataSchema: {
+    type: "object";
+    properties: Record<string, any>;
+    required: string[];
+  };
+}
+
 
 const ViewAnalysisPlanPage: React.FC = () => {
     const router = useRouter();
     const params = useParams();
     const analysisPlanId = params.analysisPlanId as string;
-    const [analysisPlanData, setanalysisPlanData] = useState<any | null>(null);
-    const [loadingRule, setLoadingRule] = useState<boolean>(true);
+    const [analysisPlanData, setAnalysisPlanData] = useState<AnalysisPlan | null>(null);
+    const [loadingAnalysisPlan, setLoadingAnalysisPlan] = useState<boolean>(true);
 
+    const initialFormData = analysisPlanData
+    ? {
+        name: analysisPlanData.name,
+        promptText: analysisPlanData.structuredDataPrompt,
+        properties: schemaToProperties(analysisPlanData.structuredDataSchema),
+        }
+    : undefined;
+
+
+    useEffect(() => {
+        if (analysisPlanId) {
+            setLoadingAnalysisPlan(true);
+            analysisPlanService.findOne( analysisPlanId)
+                .then(data => {
+                    setAnalysisPlanData(data);
+                })
+                .catch(err => {
+                    console.error("Error fetching analysis plan data:", err);
+                    showErrorToast(getApiErrorMessage(err, "Failed to load analysis plan data for editing."));
+                    setAnalysisPlanData(null);
+                })
+                .finally(() => setLoadingAnalysisPlan(false));
+        }
+    }, [ analysisPlanId]);
+
+
+    
     const handleCancel = () => {
         router.push(`/analysis-plan`);
     };
 
-    useEffect(() => {
-        if (analysisPlanId) {
-            setLoadingRule(true);
-            analysisPlanService
-                .findOne(analysisPlanId)
-                .then((data) => {
-                    setanalysisPlanData(data);
-                })
-                .catch((err) => {
-                    console.error("Error fetching rule data:", err);
-                    showErrorToast(getApiErrorMessage(err, "Failed to load analysis plan data."));
-                    setanalysisPlanData(null);
-                })
-                .finally(() => setLoadingRule(false));
-        }
-    }, [analysisPlanId]);
-
     const breadcrumbs = [
         { label: "Home", href: "/" },
-        { label: "Analysis Plan", href: "/analysis-plan" },
-        { label: loadingRule ? "View Analysis Plan" : analysisPlanData?.title || analysisPlanId },
+        { label: "Analysis Plan", href: `/analysis-plan` },
+        { label: loadingAnalysisPlan ? 'View Analysis Plan' : (analysisPlanData?.name || analysisPlanId) }
     ];
 
-    if (loadingRule) return <p>Loading rule…</p>;
-    if (!analysisPlanData) return <p>analysis Plan not found.</p>;
+    if (
+        (loadingAnalysisPlan && !analysisPlanData)) {
+        return <p>Loading data...</p>;
+    }
 
     return (
         <>
             <Breadcrumb crumbs={breadcrumbs} />
-
             <div className="my-6">
                 <h2 className="mb-2 text-2xl font-bold text-black dark:text-white">
-                    View Rule:{" "}
-                    <span className="text-indigo-600 dark:text-indigo-400">
-                        {analysisPlanData.title}
-                    </span>
+                    View Analysis Plan: <span className="text-indigo-600 dark:text-indigo-400">{analysisPlanData?.name || analysisPlanId}</span>
                 </h2>
             </div>
-
             <div className="bg-white dark:bg-gray-800 shadow-md rounded p-6">
-                <AnalysisPlanForm
-                    initialData={analysisPlanData}
+                {initialFormData ? (
+                    <AnalysisPlanForm
+                    initialData={initialFormData}
                     onCancel={handleCancel}
-                    isLoading={false}
-                    readOnly={true} 
-                />
+                    readOnly={true}
+                    />
+
+                ) : (
+                    <p>Analysis Plan data could not be loaded.</p>
+                )}
             </div>
         </>
     );

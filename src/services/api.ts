@@ -928,14 +928,27 @@ export const ruleService = {
 // Re-export AnalysisPlanProperty for convenience
 export type { AnalysisPlanProperty };
 
+// export interface AnalysisPlan {
+//     id: string;
+//     name: string;
+//     promptText: string;
+//     properties?: AnalysisPlanProperty[];
+//     createdAt: string;
+//     updatedAt: string;
+// }
 export interface AnalysisPlan {
-    id: string;
-    name: string;
-    promptText: string;
-    properties?: AnalysisPlanProperty[];
-    createdAt: string;
-    updatedAt: string;
+  id: string;
+  name: string;
+  structuredDataPrompt: string;
+  structuredDataSchema: {
+    type: "object";
+    properties: Record<string, any>;
+    required: string[];
+  };
+  createdAt: string;
+  updatedAt: string;
 }
+
 
 export type CreateAnalysisPlanDto = Omit<AnalysisPlan, 'id' | 'createdAt' | 'updatedAt'>;
 

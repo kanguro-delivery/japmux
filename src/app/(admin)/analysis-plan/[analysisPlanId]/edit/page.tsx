@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
     AnalysisPlan,
+    AnalysisPlanProperty,
     analysisPlanService,
 } from '@/services/api';
 import Breadcrumb from '@/components/common/PageBreadCrumb';
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
 import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 import AnalysisPlanForm from '@/components/form/analysisPlanForm';
+import { schemaToProperties } from '@/utils/schemaToProperties';
 
 export interface AnalysisPlanPayload {
   name: string;
@@ -21,7 +23,6 @@ export interface AnalysisPlanPayload {
   };
 }
 
-
 const EditAnalysisPlanPage: React.FC = () => {
     const router = useRouter();
     const params = useParams();
@@ -29,7 +30,23 @@ const EditAnalysisPlanPage: React.FC = () => {
     const [analysisPlanData, setAnalysisPlanData] = useState<AnalysisPlan | null>(null);
     const [loadingAnalysisPlan, setLoadingAnalysisPlan] = useState<boolean>(true);
     const [isSaving, setIsSaving] = useState<boolean>(false);
-    
+
+    const [initialFormData, setInitialFormData] = useState<{
+        name: string;
+        promptText: string;
+        properties: AnalysisPlanProperty[];
+        } | undefined>(undefined);
+
+        useEffect(() => {
+        if (analysisPlanData) {
+            setInitialFormData({
+            name: analysisPlanData.name,
+            promptText: analysisPlanData.structuredDataPrompt,
+            properties: schemaToProperties(analysisPlanData.structuredDataSchema),
+            });
+        }
+        }, [analysisPlanData]);
+
 
     useEffect(() => {
         if (analysisPlanId) {
@@ -48,37 +65,27 @@ const EditAnalysisPlanPage: React.FC = () => {
     }, [ analysisPlanId]);
 
 
-    const handleUpdateAnalysisPlan = async (analysisPlanPayload: AnalysisPlanPayload) => {
-
-        if (!analysisPlanId) {
-            showErrorToast("Analysis Plan ID is missing.");
-            return;
-        }
+    const handleUpdateAnalysisPlan= async (analysisPlanPayload: any) => {
 
         setIsSaving(true);
         try {
-            // Transform AnalysisPlanPayload to the format the API expects
-            const updateDto = {
-                name: analysisPlanPayload.name,
-                promptText: analysisPlanPayload.structuredDataPrompt,
-                properties: Object.entries(analysisPlanPayload.structuredDataSchema.properties).map(([key, value]: [string, any]) => ({
-                    name: key,
-                    type: value.type as "string" | "boolean",
-                    required: analysisPlanPayload.structuredDataSchema.required.includes(key),
-                    enumValues: value.enum || []
-                }))
-            };
-            
-            await analysisPlanService.update(analysisPlanId, updateDto);
-            showSuccessToast(`Analysis Plan updated successfully.`);
-            router.push(`/analysis-plan`);
+            console.log('Creating AnalysisPlan with payload:', {...analysisPlanPayload });
+           
+            await analysisPlanService.update(analysisPlanId, analysisPlanPayload);
+           
+                showSuccessToast(`Analysis Plan "${analysisPlanPayload.name}" edited successfully.`);
+                router.push(`/analysis-plan`);
+        
         } catch (err: unknown) {
-            console.error("Error updating analysis plan:", err);
-            showErrorToast(getApiErrorMessage(err, "Failed to update analysis plan."));
+            console.error("Error editing AnalysisPlan:", err);
+            const errorMessage = getApiErrorMessage(err, "Failed to edit AnalysisPlan.");
+            showErrorToast(errorMessage);
         } finally {
             setIsSaving(false);
-        }   
+        }
     };
+    
+
 
     const handleCancel = () => {
         router.push(`/analysis-plan`);
@@ -104,15 +111,14 @@ const EditAnalysisPlanPage: React.FC = () => {
                 </h2>
             </div>
             <div className="bg-white dark:bg-gray-800 shadow-md rounded p-6">
-                {analysisPlanData ? (
+                {initialFormData ? (
                     <AnalysisPlanForm
-                    initialData={analysisPlanData}
-                    // onSubmit={handleUpdateAnalysisPlan}
+                    initialData={initialFormData}
+                    onSubmit={handleUpdateAnalysisPlan}
                     onCancel={handleCancel}
                     submitLabel="Update Analysis Plan"
                     isLoading={isSaving}
                     />
-
                 ) : (
                     <p>Analysis Plan data could not be loaded.</p>
                 )}

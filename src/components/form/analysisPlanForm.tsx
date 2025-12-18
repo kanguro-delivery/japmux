@@ -12,7 +12,6 @@ interface AnalysisPlanFormProps {
     properties?: AnalysisPlanProperty[];
   };
  onSubmit?: (data: 
-
    { name: string;
     structuredDataPrompt: string;
     structuredDataSchema: {
@@ -169,6 +168,7 @@ const [hasPropertyErrors, setHasPropertyErrors] = useState(false);
        initialProperties={formData.properties}
         onChange={handlePropertiesChange}
         onErrorsChange={(hasErrors) => setHasPropertyErrors(hasErrors)}
+        readOnly={readOnly}
       />
 
       </div>
