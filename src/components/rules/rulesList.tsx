@@ -27,8 +27,9 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
       setRules(rulesData);
       setError(null);
     } catch (err: any) {
-      getApiErrorMessage(err, "Failed to load rules.")
-      showErrorToast('Failed to load rules');
+      const message = getApiErrorMessage(err, "Failed to load rules.");
+      setError(message);
+      showErrorToast(message);
     } finally {
       setLoading(false);
     }
@@ -79,7 +80,6 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
   return (
     <RulesTable
       rules={rules}
-      // onEdit={handleEditRule}
       onDelete={handleDeleteRule}
       loading={loading}
       deletingRules={deletingRules}

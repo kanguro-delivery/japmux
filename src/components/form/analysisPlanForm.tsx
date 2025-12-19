@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import AnalysisPlanEditor from "../common/AnalysisPlanEditor";
 import AnalysisPlanPropertiesEditor, { AnalysisPlanProperty } from "./AnalysisPlanProperties";
 import TextInput from "./form-elements/TextInput";
-import { AnalysisPlanPayload } from "@/app/(admin)/analysis-plan/[analysisPlanId]/edit/page";
 import { showErrorToast } from "@/utils/toastUtils";
 
 interface AnalysisPlanFormProps {
@@ -126,8 +125,6 @@ const [hasPropertyErrors, setHasPropertyErrors] = useState(false);
   ) {
     return showErrorToast("Structured Data Schema cannot be empty");
   }
-
-  console.log("Payload to send:", payload);
 
   await onSubmit?.(payload);
 };

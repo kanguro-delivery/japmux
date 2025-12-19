@@ -3,9 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-    analysisPlanService,
-    ruleService,
-} from '@/services/api';
+analysisPlanService,} from '@/services/api';
 import Breadcrumb from '@/components/common/PageBreadCrumb';
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
 import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
@@ -21,17 +19,15 @@ const NewAnalysisPlanPage: React.FC = () => {
 
         setIsSaving(true);
         try {
-            console.log('Creating AnalysisPlan with payload:', {...analysisPlanPayload });
-           
             const createdAnalysisPlan = await analysisPlanService.create( analysisPlanPayload);
             if (createdAnalysisPlan && createdAnalysisPlan.id) {
                 showSuccessToast(`Analysis Plan "${analysisPlanPayload.name}" created successfully.`);
                 router.push(`/analysis-plan`);
             } else {
-                throw new Error("Failed to create rule: No rule ID returned");
+                throw new Error("Failed to create  analysis plan: No ID returned");
             }
         } catch (err: unknown) {
-            console.error("Error creating AnalysisPlan:", err);
+
             const errorMessage = getApiErrorMessage(err, "Failed to create AnalysisPlan.");
             showErrorToast(errorMessage);
             // No redirigir en caso de error

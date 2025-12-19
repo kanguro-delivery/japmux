@@ -27,8 +27,9 @@ export const AnalysisPlanList: React.FC<AnalysisPlanListProps> = ({  }) => {
       setAnalysisPlans(analysisPlansData);
       setError(null);
     } catch (err: any) {
-      getApiErrorMessage(err, "Failed to load rules.")
-      showErrorToast('Failed to load rules');
+      const message = getApiErrorMessage(err, "Failed to load analysis plans.");
+      setError(message);
+      showErrorToast(message);
     } finally {
       setLoading(false);
     }
@@ -39,10 +40,10 @@ export const AnalysisPlanList: React.FC<AnalysisPlanListProps> = ({  }) => {
       try {
         setDeletingAnalysisPlans(prev => new Set(prev).add(analysisPlanId));
         await analysisPlanService.remove(analysisPlanId);
-        showSuccessToast('Rule deleted successfully');
+        showSuccessToast('Analysis plan deleted successfully');
         fetchAnalysisPlans();
       } catch (err: any) {
-        showErrorToast(getApiErrorMessage(err, 'Failed to delete analysisPlanId'));
+        showErrorToast(getApiErrorMessage(err, 'Failed to delete analysis plan'));
       } finally {
         setDeletingAnalysisPlans(prev => {
           const newSet = new Set(prev);
@@ -58,7 +59,7 @@ export const AnalysisPlanList: React.FC<AnalysisPlanListProps> = ({  }) => {
     return (
       <div className="text-center py-12">
         <div className="w-8 h-8 mx-auto mb-4 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
-        <p className="text-gray-600 dark:text-gray-400 font-medium">Loading rules...</p>
+        <p className="text-gray-600 dark:text-gray-400 font-medium">Loading Analysis Plans...</p>
       </div>
     );
   }
@@ -79,7 +80,6 @@ export const AnalysisPlanList: React.FC<AnalysisPlanListProps> = ({  }) => {
   return (
     <AnalysisPlanTable
       analysisPlanes={analysisPlans}
-      // onEdit={handleEditRule}
       onDelete={handleDeleteAnalysisPlans}
       loading={loading}
       deletingAnalysisPlans={deletingAnalysisPlans}

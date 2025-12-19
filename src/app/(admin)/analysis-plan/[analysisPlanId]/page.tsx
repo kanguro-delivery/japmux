@@ -7,21 +7,20 @@ import {
     analysisPlanService,
 } from '@/services/api';
 import Breadcrumb from '@/components/common/PageBreadCrumb';
-import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
+import { showErrorToast } from '@/utils/toastUtils';
 import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 import AnalysisPlanForm from '@/components/form/analysisPlanForm';
 import { schemaToProperties } from '@/utils/schemaToProperties';
 
-export interface AnalysisPlanPayload {
-  name: string;
-  structuredDataPrompt: string;
-  structuredDataSchema: {
-    type: "object";
-    properties: Record<string, any>;
-    required: string[];
-  };
-}
-
+// export interface AnalysisPlanPayload {
+//   name: string;
+//   structuredDataPrompt: string;
+//   structuredDataSchema: {
+//     type: "object";
+//     properties: Record<string, any>;
+//     required: string[];
+//   };
+// }
 
 const ViewAnalysisPlanPage: React.FC = () => {
     const router = useRouter();
@@ -48,7 +47,7 @@ const ViewAnalysisPlanPage: React.FC = () => {
                 })
                 .catch(err => {
                     console.error("Error fetching analysis plan data:", err);
-                    showErrorToast(getApiErrorMessage(err, "Failed to load analysis plan data for editing."));
+                    showErrorToast(getApiErrorMessage(err, "Failed to load analysis plan data."));
                     setAnalysisPlanData(null);
                 })
                 .finally(() => setLoadingAnalysisPlan(false));

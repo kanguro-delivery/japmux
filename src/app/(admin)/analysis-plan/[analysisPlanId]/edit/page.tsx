@@ -13,15 +13,15 @@ import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 import AnalysisPlanForm from '@/components/form/analysisPlanForm';
 import { schemaToProperties } from '@/utils/schemaToProperties';
 
-export interface AnalysisPlanPayload {
-  name: string;
-  structuredDataPrompt: string;
-  structuredDataSchema: {
-    type: "object";
-    properties: Record<string, any>;
-    required: string[];
-  };
-}
+// export interface AnalysisPlanPayload {
+//   name: string;
+//   structuredDataPrompt: string;
+//   structuredDataSchema: {
+//     type: "object";
+//     properties: Record<string, any>;
+//     required: string[];
+//   };
+// }
 
 const EditAnalysisPlanPage: React.FC = () => {
     const router = useRouter();
@@ -56,8 +56,7 @@ const EditAnalysisPlanPage: React.FC = () => {
                     setAnalysisPlanData(data);
                 })
                 .catch(err => {
-                    console.error("Error fetching analysis plan data:", err);
-                    showErrorToast(getApiErrorMessage(err, "Failed to load analysis plan data for editing."));
+                    showErrorToast(getApiErrorMessage(err, "Failed to load analysis plan data."));
                     setAnalysisPlanData(null);
                 })
                 .finally(() => setLoadingAnalysisPlan(false));
@@ -69,15 +68,11 @@ const EditAnalysisPlanPage: React.FC = () => {
 
         setIsSaving(true);
         try {
-            console.log('Creating AnalysisPlan with payload:', {...analysisPlanPayload });
-           
             await analysisPlanService.update(analysisPlanId, analysisPlanPayload);
-           
                 showSuccessToast(`Analysis Plan "${analysisPlanPayload.name}" edited successfully.`);
                 router.push(`/analysis-plan`);
         
         } catch (err: unknown) {
-            console.error("Error editing AnalysisPlan:", err);
             const errorMessage = getApiErrorMessage(err, "Failed to edit AnalysisPlan.");
             showErrorToast(errorMessage);
         } finally {

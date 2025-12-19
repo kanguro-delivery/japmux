@@ -582,7 +582,7 @@ const AnalysisPlanEditor: React.FC<AnalysisPlanEditorProps> = React.memo(({
                         role="status"
                         aria-live="polite"
                     >
-                        Guarding...
+                        Saving...
                     </div>
                 )}
             </div>
@@ -656,6 +656,6 @@ const AnalysisPlanEditor: React.FC<AnalysisPlanEditorProps> = React.memo(({
     );
 });
 
-AnalysisPlanEditor.displayName = 'PromptEditor';
+AnalysisPlanEditor.displayName = 'AnalysisPlanEditor';
 
 export default AnalysisPlanEditor; 

@@ -928,14 +928,6 @@ export const ruleService = {
 // Re-export AnalysisPlanProperty for convenience
 export type { AnalysisPlanProperty };
 
-// export interface AnalysisPlan {
-//     id: string;
-//     name: string;
-//     promptText: string;
-//     properties?: AnalysisPlanProperty[];
-//     createdAt: string;
-//     updatedAt: string;
-// }
 export interface AnalysisPlan {
   id: string;
   name: string;

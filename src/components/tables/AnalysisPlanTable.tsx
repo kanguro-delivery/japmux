@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import CopyButton from '../common/CopyButton';
-import { BoltIcon, ClockIcon, DocumentDuplicateIcon, TrashIcon, PencilIcon, BookOpenIcon } from '@heroicons/react/24/outline';
-import { AnalysisPlan, Rule } from '@/services/api';
+import { ClockIcon, DocumentDuplicateIcon, TrashIcon, PencilIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+import { AnalysisPlan } from '@/services/api';
 
 // Tipo personalizado para una regla existente
 
@@ -144,7 +144,7 @@ const AnalysisPlanTable: React.FC<AnalysisPlanTableProps> = ({ analysisPlanes, o
                             <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/60 dark:from-gray-900/60 dark:via-gray-800/40 dark:to-gray-900/60 backdrop-blur-xl rounded-3xl"></div>
                             <div className="relative p-12 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-3xl border border-white/30 dark:border-gray-700/40 shadow-lg">
                                 <DocumentDuplicateIcon className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No AnalysisPlanes Found</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No Analysis Plans Found</h3>
                                 <p className="text-gray-500 dark:text-gray-400">No Analysis Planes have been created yet.</p>
                             </div>
                         </div>
