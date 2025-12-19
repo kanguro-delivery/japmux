@@ -150,9 +150,10 @@ useEffect(() => {
             />
           ) : (
             <TextInput
-              disabled={readOnly}
+              disabled
               label=""
-              value={prop.enumValues.join(",")}
+              value="true, false"
+              // value={prop.enumValues.join(",")}
               onChange={(e) =>
                 handlePropertyChange(
                   index,
