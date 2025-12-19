@@ -13,16 +13,6 @@ import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
 import AnalysisPlanForm from '@/components/form/analysisPlanForm';
 import { schemaToProperties } from '@/utils/schemaToProperties';
 
-// export interface AnalysisPlanPayload {
-//   name: string;
-//   structuredDataPrompt: string;
-//   structuredDataSchema: {
-//     type: "object";
-//     properties: Record<string, any>;
-//     required: string[];
-//   };
-// }
-
 const EditAnalysisPlanPage: React.FC = () => {
     const router = useRouter();
     const params = useParams();
