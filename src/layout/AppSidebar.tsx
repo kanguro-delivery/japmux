@@ -28,7 +28,7 @@ import {
   EyeIcon as HeroEyeIcon,
   ChatBubbleLeftRightIcon as HeroChatIcon,
   SparklesIcon as HeroSparklesIcon,
-  AdjustmentsHorizontalIcon,
+  AdjustmentsHorizontalIcon,WrenchScrewdriverIcon,
   BuildingOfficeIcon as HeroBuildingIcon,
   TableCellsIcon as HeroTableIcon,
   ClipboardDocumentCheckIcon as HeroTaskIcon,
@@ -109,6 +109,11 @@ const AppSidebar: React.FC = () => {
           icon: <AdjustmentsHorizontalIcon className="h-5 w-5" />,
           name: "My Rules",
           path:  `/rules` ,
+        },
+        {
+          icon: <WrenchScrewdriverIcon className="h-5 w-5" />,
+          name: "Analysis Plans",
+          path:  `/analysis-plan` ,
         },
         {
           icon: <PaperPlaneIcon className="h-5 w-5" />,

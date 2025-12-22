@@ -7,6 +7,7 @@ interface TextInputProps {
   required?: boolean;
   readOnly?: boolean;
   disabled?: boolean;
+  placeholder?:string
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -16,10 +17,13 @@ const TextInput: React.FC<TextInputProps> = ({
   required = false,
   readOnly = false,
   disabled = false,
+  placeholder=''
 }) => {
   return (
     <div>
+      {label && (
       <label className="block text-sm font-medium mb-2">{label}</label>
+    )}
       <input
         type="text"
         value={value}
@@ -28,6 +32,7 @@ const TextInput: React.FC<TextInputProps> = ({
         required={required}
         readOnly={readOnly}
         disabled={disabled}
+        placeholder={placeholder}
       />
     </div>
   );

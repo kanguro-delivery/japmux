@@ -1,33 +1,33 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Rule, ruleService } from '@/services/api'; 
+import { AnalysisPlan, analysisPlanService } from '@/services/api'; 
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
-import RulesTable from '@/components/tables/RulesTable';
 import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
+import AnalysisPlanTable from '../tables/AnalysisPlanTable';
 
 
-interface RulesListProps {
+interface AnalysisPlanListProps {
 }
 
-export const RulesList: React.FC<RulesListProps> = ({  }) => {
-  const [rules, setRules] = useState<Rule[]>([]);
+export const AnalysisPlanList: React.FC<AnalysisPlanListProps> = ({  }) => {
+  const [ analysisPlans, setAnalysisPlans] = useState<AnalysisPlan[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [deletingRules, setDeletingRules] = useState<Set<string>>(new Set());
+  const [deletingAnalysisPlans, setDeletingAnalysisPlans] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    fetchRules();
+    fetchAnalysisPlans();
   }, []);
 
-  const fetchRules = async () => {
+  const fetchAnalysisPlans = async () => {
     try {
       setLoading(true);
-      const rulesData = await ruleService.findAllByProject();
-      setRules(rulesData);
+      const analysisPlansData = await analysisPlanService.findAllByProject();
+      setAnalysisPlans(analysisPlansData);
       setError(null);
     } catch (err: any) {
-      const message = getApiErrorMessage(err, "Failed to load rules.");
+      const message = getApiErrorMessage(err, "Failed to load analysis plans.");
       setError(message);
       showErrorToast(message);
     } finally {
@@ -35,19 +35,19 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
     }
   };
 
-  const handleDeleteRule = async (ruleId: string, ruleName: string) => {
-    if (window.confirm(`Are you sure you want to delete rule "${ruleName}"?`)) {
+  const handleDeleteAnalysisPlans= async (analysisPlanId: string, analysisPlanName: string) => {
+    if (window.confirm(`Are you sure you want to delete analysisPlan "${analysisPlanName}"?`)) {
       try {
-        setDeletingRules(prev => new Set(prev).add(ruleId));
-        await ruleService.remove(ruleId);
-        showSuccessToast('Rule deleted successfully');
-        fetchRules();
+        setDeletingAnalysisPlans(prev => new Set(prev).add(analysisPlanId));
+        await analysisPlanService.remove(analysisPlanId);
+        showSuccessToast('Analysis plan deleted successfully');
+        fetchAnalysisPlans();
       } catch (err: any) {
-        showErrorToast(getApiErrorMessage(err, 'Failed to delete rule'));
+        showErrorToast(getApiErrorMessage(err, 'Failed to delete analysis plan'));
       } finally {
-        setDeletingRules(prev => {
+        setDeletingAnalysisPlans(prev => {
           const newSet = new Set(prev);
-          newSet.delete(ruleId);
+          newSet.delete(analysisPlanId);
           return newSet;
         });
       }
@@ -59,7 +59,7 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
     return (
       <div className="text-center py-12">
         <div className="w-8 h-8 mx-auto mb-4 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
-        <p className="text-gray-600 dark:text-gray-400 font-medium">Loading rules...</p>
+        <p className="text-gray-600 dark:text-gray-400 font-medium">Loading Analysis Plans...</p>
       </div>
     );
   }
@@ -78,11 +78,11 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
   }
 
   return (
-    <RulesTable
-      rules={rules}
-      onDelete={handleDeleteRule}
+    <AnalysisPlanTable
+      analysisPlanes={analysisPlans}
+      onDelete={handleDeleteAnalysisPlans}
       loading={loading}
-      deletingRules={deletingRules}
+      deletingAnalysisPlans={deletingAnalysisPlans}
     />
   );
 };
