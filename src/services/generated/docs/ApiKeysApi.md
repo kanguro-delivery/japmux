@@ -1,4 +1,4 @@
-# ApiKeysApi
+# APIKeysApi
 
 All URIs are relative to *http://localhost*
 
@@ -11,20 +11,20 @@ All URIs are relative to *http://localhost*
 |[**apiKeyControllerUpdate**](#apikeycontrollerupdate) | **PATCH** /api/api-keys/{id} | Update an API Key for the current user|
 
 # **apiKeyControllerCreate**
-> CreateApiKeyResponseDto apiKeyControllerCreate(createApiKeyDto)
+> apiKeyControllerCreate(createApiKeyDto)
 
 
 ### Example
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration,
     CreateApiKeyDto
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let createApiKeyDto: CreateApiKeyDto; //
 
@@ -42,7 +42,7 @@ const { status, data } = await apiInstance.apiKeyControllerCreate(
 
 ### Return type
 
-**CreateApiKeyResponseDto**
+void (empty response body)
 
 ### Authorization
 
@@ -51,13 +51,13 @@ const { status, data } = await apiInstance.apiKeyControllerCreate(
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** | API Key created successfully. The full key is returned only once. |  -  |
+|**201** |  |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -69,12 +69,12 @@ const { status, data } = await apiInstance.apiKeyControllerCreate(
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 const { status, data } = await apiInstance.apiKeyControllerFindAll();
 ```
@@ -112,12 +112,12 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let id: string; // (default to undefined)
 
@@ -162,12 +162,12 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let id: string; // (default to undefined)
 
@@ -212,13 +212,13 @@ void (empty response body)
 
 ```typescript
 import {
-    ApiKeysApi,
+    APIKeysApi,
     Configuration,
     UpdateApiKeyDto
 } from './api';
 
 const configuration = new Configuration();
-const apiInstance = new ApiKeysApi(configuration);
+const apiInstance = new APIKeysApi(configuration);
 
 let id: string; // (default to undefined)
 let updateApiKeyDto: UpdateApiKeyDto; //
