@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import CopyButton from '../common/CopyButton';
 import { BoltIcon, ClockIcon, DocumentDuplicateIcon, TrashIcon, PencilIcon, BookOpenIcon } from '@heroicons/react/24/outline';
@@ -17,13 +17,7 @@ interface RulesTableProps {
 }
 
 const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, deletingRules = new Set(), viewMode = 'card' }) => {
-    const [rulesWithStats, setRulesWithStats] = useState<Rule[]>([]);
 
-    useEffect(() => {
-        setRulesWithStats(rules);
-    }, [rules]);
-
-    
     // Función para generar bandera de idioma
     const renderLanguageFlag = (language?: string) => {
         if (!language) {
@@ -82,16 +76,16 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, delet
                 <table className="min-w-full divide-y divide-white/30 dark:divide-gray-700/40">
                     <thead>
                         <tr className="text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                            <th className="px-6 py-4">Title</th>
-                            <th className="px-6 py-4">Language</th>
-                            <th className="px-6 py-4">Version</th>
-                            <th className="px-6 py-4">Content</th>
-                            <th className="px-6 py-4">Updated</th>
-                            <th className="px-6 py-4 text-right">Actions</th>
+                            <th scope="col" className="px-6 py-4">Title</th>
+                            <th scope="col" className="px-6 py-4">Language</th>
+                            <th scope="col" className="px-6 py-4">Version</th>
+                            <th scope="col" className="px-6 py-4">Content</th>
+                            <th scope="col" className="px-6 py-4">Updated</th>
+                            <th scope="col" className="px-6 py-4 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/20 dark:divide-gray-700/30">
-                        {rulesWithStats.map((item: Rule) => (
+                        {rules.map((item: Rule) => (
                             <tr key={item.id} className="hover:bg-white/30 dark:hover:bg-gray-700/20 transition-colors duration-200">
                                 <td className="px-6 py-4 align-top">
                                     <div className="flex items-center space-x-2">
@@ -104,7 +98,7 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, delet
                                 <td className="px-6 py-4 align-top max-w-xs">
                                     <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2" title={item.content}>{item.content || 'No content provided'}</p>
                                 </td>
-                                <td className="px-6 py-4 align-top text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{new Date(item.updatedAt).toLocaleDateString()}</td>
+                                <td className="px-6 py-4 align-top text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap" suppressHydrationWarning>{new Date(item.updatedAt).toLocaleDateString()}</td>
                                 <td className="px-6 py-4 align-top">
                                     <div className="flex items-center justify-end space-x-2">
                                         <Link
@@ -157,7 +151,7 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, delet
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {rulesWithStats.map((item: Rule) => (
+            {rules.map((item: Rule) => (
                 <div key={item.id} className="group relative">
                     {/* Background blur and gradient effects */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/60 to-white/80 dark:from-gray-900/80 dark:via-gray-800/60 dark:to-gray-900/80 backdrop-blur-xl rounded-2xl"></div>
@@ -247,7 +241,7 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, delet
                             <div className="flex items-center justify-between pt-4 border-t border-white/20 dark:border-gray-700/30">
                                 <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                                     <ClockIcon className="w-4 h-4" />
-                                    <span>Updated {new Date(item.updatedAt).toLocaleDateString()}</span>
+                                    <span suppressHydrationWarning>Updated {new Date(item.updatedAt).toLocaleDateString()}</span>
                                 </div>
                                 <Link
                                     href={`/rules/${item.id}`}

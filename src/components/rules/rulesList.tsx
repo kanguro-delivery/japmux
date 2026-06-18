@@ -5,7 +5,7 @@ import { Rule, ruleService } from '@/services/api';
 import { showSuccessToast, showErrorToast } from '@/utils/toastUtils';
 import RulesTable, { RulesViewMode } from '@/components/tables/RulesTable';
 import { getApiErrorMessage } from '@/utils/getApiErrorMessage';
-import { Squares2X2Icon, TableCellsIcon } from '@heroicons/react/24/outline';
+import { Squares2X2Icon, TableCellsIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const ALL_LANGUAGES = '__all__';
 
@@ -19,23 +19,27 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
   const [deletingRules, setDeletingRules] = useState<Set<string>>(new Set());
   const [selectedLanguage, setSelectedLanguage] = useState<string>(ALL_LANGUAGES);
   const [viewMode, setViewMode] = useState<RulesViewMode>('card');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const languages = useMemo(() => {
     const set = new Set<string>();
     rules.forEach((rule) => {
       if (rule.language) {
-        set.add(rule.language);
+        set.add(rule.language.toLowerCase());
       }
     });
     return Array.from(set).sort();
   }, [rules]);
 
   const filteredRules = useMemo(() => {
-    if (selectedLanguage === ALL_LANGUAGES) {
-      return rules;
-    }
-    return rules.filter((rule) => rule.language === selectedLanguage);
-  }, [rules, selectedLanguage]);
+    const query = searchTerm.trim().toLowerCase();
+    return rules.filter((rule) => {
+      const matchesLanguage =
+        selectedLanguage === ALL_LANGUAGES || rule.language?.toLowerCase() === selectedLanguage;
+      const matchesSearch = !query || rule.title.toLowerCase().includes(query);
+      return matchesLanguage && matchesSearch;
+    });
+  }, [rules, selectedLanguage, searchTerm]);
 
   useEffect(() => {
     fetchRules();
@@ -114,6 +118,30 @@ export const RulesList: React.FC<RulesListProps> = ({  }) => {
 
   return (
     <div className="space-y-6">
+      {/* Search box */}
+      <div className="relative max-w-md">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+        </div>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search rules by title..."
+          className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm border border-white/30 dark:border-gray-700/40 text-sm text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-all duration-300"
+        />
+        {searchTerm && (
+          <button
+            onClick={() => setSearchTerm('')}
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
+            aria-label="Clear search"
+            title="Clear search"
+          >
+            <XMarkIcon className="w-5 h-5" />
+          </button>
+        )}
+      </div>
+
       {/* Filters and view toggle */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         {/* Language tabs */}
