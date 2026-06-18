@@ -6,14 +6,17 @@ import { Rule } from '@/services/api';
 
 // Tipo personalizado para una regla existente
 
+export type RulesViewMode = 'card' | 'table';
+
 interface RulesTableProps {
     rules: Rule[];
     onDelete: (id: string, name: string) => Promise<void>;
     loading?: boolean;
     deletingRules?: Set<string>;
+    viewMode?: RulesViewMode;
 }
 
-const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, deletingRules = new Set() }) => {
+const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, deletingRules = new Set(), viewMode = 'card' }) => {
     const [rulesWithStats, setRulesWithStats] = useState<Rule[]>([]);
 
     useEffect(() => {
@@ -52,6 +55,102 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, delet
         return (
             <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
+            </div>
+        );
+    }
+
+    const emptyState = (
+        <div className="text-center py-16">
+            <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/60 dark:from-gray-900/60 dark:via-gray-800/40 dark:to-gray-900/60 backdrop-blur-xl rounded-3xl"></div>
+                <div className="relative p-12 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-3xl border border-white/30 dark:border-gray-700/40 shadow-lg">
+                    <DocumentDuplicateIcon className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No Rules Found</h3>
+                    <p className="text-gray-500 dark:text-gray-400">No rules have been created yet.</p>
+                </div>
+            </div>
+        </div>
+    );
+
+    if (rules.length === 0 && !loading) {
+        return emptyState;
+    }
+
+    if (viewMode === 'table') {
+        return (
+            <div className="relative overflow-x-auto rounded-2xl border border-white/30 dark:border-gray-700/40 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm shadow-lg">
+                <table className="min-w-full divide-y divide-white/30 dark:divide-gray-700/40">
+                    <thead>
+                        <tr className="text-left text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                            <th className="px-6 py-4">Title</th>
+                            <th className="px-6 py-4">Language</th>
+                            <th className="px-6 py-4">Version</th>
+                            <th className="px-6 py-4">Content</th>
+                            <th className="px-6 py-4">Updated</th>
+                            <th className="px-6 py-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/20 dark:divide-gray-700/30">
+                        {rulesWithStats.map((item: Rule) => (
+                            <tr key={item.id} className="hover:bg-white/30 dark:hover:bg-gray-700/20 transition-colors duration-200">
+                                <td className="px-6 py-4 align-top">
+                                    <div className="flex items-center space-x-2">
+                                        <span className="font-semibold text-gray-900 dark:text-white line-clamp-1" title={item.title}>{item.title}</span>
+                                        <CopyButton textToCopy={item.title} />
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 align-top">{renderLanguageFlag(item.language) || <span className="text-xs text-gray-400">—</span>}</td>
+                                <td className="px-6 py-4 align-top text-sm text-gray-600 dark:text-gray-300">{item.version ? `v${item.version}` : '—'}</td>
+                                <td className="px-6 py-4 align-top max-w-xs">
+                                    <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2" title={item.content}>{item.content || 'No content provided'}</p>
+                                </td>
+                                <td className="px-6 py-4 align-top text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">{new Date(item.updatedAt).toLocaleDateString()}</td>
+                                <td className="px-6 py-4 align-top">
+                                    <div className="flex items-center justify-end space-x-2">
+                                        <Link
+                                            href={`/rules/${item.id}`}
+                                            className="p-2 rounded-lg text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-200"
+                                            aria-label="View Rule"
+                                            title="View Rule"
+                                        >
+                                            <BookOpenIcon className="w-4 h-4" />
+                                        </Link>
+                                        <Link
+                                            href={`/rules/${item.id}/edit`}
+                                            className="p-2 rounded-lg text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-200"
+                                            aria-label="Edit Rule"
+                                            title="Edit Rule"
+                                        >
+                                            <PencilIcon className="w-4 h-4" />
+                                        </Link>
+                                        <button
+                                            onClick={() => {
+                                                if (!deletingRules.has(item.id)) {
+                                                    onDelete(item.id, item.title);
+                                                }
+                                            }}
+                                            disabled={deletingRules.has(item.id)}
+                                            className={`p-2 rounded-lg hover:bg-white/40 dark:hover:bg-gray-700/40 transition-all duration-200 ${deletingRules.has(item.id)
+                                                ? 'text-gray-400 cursor-not-allowed opacity-50'
+                                                : 'text-red-500 hover:text-red-700 dark:hover:text-red-300'
+                                                }`}
+                                            aria-label={deletingRules.has(item.id) ? 'Deleting...' : 'Delete Rule'}
+                                            title={deletingRules.has(item.id) ? 'Deleting rule...' : 'Delete rule'}
+                                        >
+                                            {deletingRules.has(item.id) ? (
+                                                <div className="w-4 h-4 flex items-center justify-center">
+                                                    <div className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                                                </div>
+                                            ) : (
+                                                <TrashIcon className="w-4 h-4" />
+                                            )}
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         );
     }
@@ -170,20 +269,6 @@ const RulesTable: React.FC<RulesTableProps> = ({ rules, onDelete, loading, delet
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-200/20 to-purple-200/20 dark:from-brand-800/10 dark:to-purple-800/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none"></div>
                 </div>
             ))}
-            {rules.length === 0 && !loading && (
-                <div className="col-span-full">
-                    <div className="text-center py-16">
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-white/60 dark:from-gray-900/60 dark:via-gray-800/40 dark:to-gray-900/60 backdrop-blur-xl rounded-3xl"></div>
-                            <div className="relative p-12 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-3xl border border-white/30 dark:border-gray-700/40 shadow-lg">
-                                <DocumentDuplicateIcon className="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">No Rules Found</h3>
-                                <p className="text-gray-500 dark:text-gray-400">No rules have been created yet.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
