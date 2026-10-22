@@ -21,7 +21,7 @@ A comprehensive web application designed to streamline the process of prompt eng
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+- Node.js 24+ (see `.nvmrc`)
 - npm or yarn
 - A modern web browser
 

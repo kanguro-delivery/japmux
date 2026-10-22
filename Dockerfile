@@ -1,7 +1,7 @@
 # Dockerfile for JAPMUX - Simplified Production Build
 
 # Use Node.js LTS Alpine for smaller image size
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 WORKDIR /app
 
 # Install dependencies for building including Java
@@ -31,7 +31,7 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # Create production stage
-FROM node:20-alpine AS production
+FROM node:24-alpine AS production
 WORKDIR /app
 
 # Create non-root user for security
